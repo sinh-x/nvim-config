@@ -1,0 +1,427 @@
+return {
+  'jalvesaq/Nvim-R',
+  dependencies = {
+    'hrsh7th/nvim-cmp',
+    'jalvesaq/cmp-nvim-r',
+  },
+  config = function()
+    -- TODO: setup keyshortut for Nvim-R
+
+    -- set keymap
+    local keymap = vim.keymap -- for consiseness
+
+    keymap.set('n', '<leader>rr', ":call StartR('R')<CR>", { desc = 'Start R Session' })
+    keymap.set('n', '<leader>rl', ":call SendLineToR('stay')<CR>", { desc = 'Start R Session' })
+  end,
+}
+
+--
+-- n  \           *@<Cmd>lua require("which-key").show("\\", {mode = "n", auto = true})<CR>
+-- v  \rd         *@<Esc>:call RSetWD()<CR>
+-- no \rd         *@:call RSetWD()<CR>
+-- v  \ko         *@<Esc>:call RMakeRmd("odt_document")<CR>
+-- no \ko         *@:call RMakeRmd("odt_document")<CR>
+-- v  \kh         *@<Esc>:call RMakeRmd("html_document")<CR>
+-- no \kh         *@:call RMakeRmd("html_document")<CR>
+-- v  \kw         *@<Esc>:call RMakeRmd("word_document")<CR>
+-- no \kw         *@:call RMakeRmd("word_document")<CR>
+-- v  \kl         *@<Esc>:call RMakeRmd("beamer_presentation")<CR>
+-- no \kl         *@:call RMakeRmd("beamer_presentation")<CR>
+-- v  \kp         *@<Esc>:call RMakeRmd("pdf_document")<CR>
+-- no \kp         *@:call RMakeRmd("pdf_document")<CR>
+-- v  \ka         *@<Esc>:call RMakeRmd("all")<CR>
+-- no \ka         *@:call RMakeRmd("all")<CR>
+-- v  \kr         *@<Esc>:call RMakeRmd("default")<CR>
+-- no \kr         *@:call RMakeRmd("default")<CR>
+-- v  \r-         *@<Esc>:call RBrOpenCloseLs("C")<CR>
+-- no \r-         *@:call RBrOpenCloseLs("C")<CR>
+-- v  \r=         *@<Esc>:call RBrOpenCloseLs("O")<CR>
+-- no \r=         *@:call RBrOpenCloseLs(O")<CR>
+-- v  \ro         *@<Esc>:call RObjBrowse()<CR>
+-- no \ro         *@:call RObjBrowser()<CR>
+-- v  \rb         *@<Esc>:call RAction("plotsumm", "v")<CR>
+-- v  \rg         *@<Esc>:call RAction("plot", "v")<CR>
+-- v  \rs         *@<Esc>:call RAction("summary", "v")<CR>
+-- no \rb         *@:call RAction("plotsumm")<CR>
+-- no \rg         *@:call RAction("plot")<CR>
+-- no \rs         *@:call RAction("summary")<CR>
+-- v  \rh         *@<Esc>:call RAction("help")<CR>
+-- no \rh         *@:call RAction("help")<CR>
+-- v  \re         *@<Esc>:call RAction("example")<CR>
+-- no \re         *@:call RAction("example")<CR>
+-- v  \ra         *@<Esc>:call RAction("args")<CR>
+-- no \ra         *@:call RAction("args")<CR>
+-- v  \td         *@<Esc>:call RAction("dputtab", "v")<CR>
+-- v  \vh         *@<Esc>:call RAction("viewobj", "v", ", howto='above 7split', nrows=6")<CR>
+-- v  \vv         *@<Esc>:call RAction("viewobj", "v", ", howto='vsplit'")<CR>
+-- v  \vs         *@<Esc>:call RAction("viewobj", "v", ", howto='split'")<CR>
+-- v  \rv         *@<Esc>:call RAction("viewobj", "v")<CR>
+-- v  \rt         *@<Esc>:call RAction("str", "v")<CR>
+-- v  \rn         *@<Esc>:call RAction("nvim.names", "v")<CR>
+-- v  \rp         *@<Esc>:call RAction("print", "v")<CR>
+-- no \td         *@:call RAction("dputtab")<CR>
+-- no \vh         *@:call RAction("viewobj", ", howto='above 7split', nrows=6")<CR>
+-- no \vv         *@:call RAction("viewobj", ", howto='vsplit'")<CR>
+-- no \vs         *@:call RAction("viewobj", ", howto='split'")<CR>
+-- no \rv         *@:call RAction("viewobj")<CR>
+-- no \rt         *@:call RAction("str")<CR>
+-- no \rn         *@:call RAction("nvim.names")<CR>
+-- no \rp         *@:call RAction("print")<CR>
+-- v  \rm         *@<Esc>:call RClearAll()<CR>
+-- no \rm         *@:call RClearAll()<CR>
+-- v  \rr         *@<Esc>:call RClearConsole()<CR>
+-- no \rr         *@:call RClearConsole()<CR>
+-- v  \rl         *@<Esc>:call g:SendCmdToR("ls()")<CR>
+-- no \rl         *@:call g:SendCmdToR("ls()")<CR>
+--    \ud         *@:call RAction("undebug")<CR>
+--    \bg         *@:call RAction("debug")<CR>
+--    \su         *@:call SendAboveLinesToR()<CR>
+--    \r<Right>   *@:call RSendPartOfLine("right", 0)<CR>
+--    \r<Left>    *@:call RSendPartOfLine("left", 0)<CR>
+--    \m          *@:set opfunc=SendMotionToR<CR>g@
+-- v  \o          *@<Esc>:call RWarningMsg("This command does not work over a selection of lines.")<CR>
+-- no \o          *@:call SendLineToRAndInsertOutput()<CR>0
+--    \d          *@:call SendLineToR("down")<CR>0
+--    \l          *@:call SendLineToR("stay")<CR>
+--    \pa         *@:call SendParagraphToR("echo", "down")<CR>
+--    \pd         *@:call SendParagraphToR("silent", "down")<CR>
+--    \pe         *@:call SendParagraphToR("echo", "stay")<CR>
+--    \pp         *@:call SendParagraphToR("silent", "stay")<CR>
+-- v  \so         *@<Esc>:call SendSelectionToR("echo", "stay", "NewtabInsert")<CR>
+-- v  \sa         *@<Esc>:call SendSelectionToR("echo", "down")<CR>
+-- v  \sd         *@<Esc>:call SendSelectionToR("silent", "down")<CR>
+-- v  \se         *@<Esc>:call SendSelectionToR("echo", "stay")<CR>
+-- v  \ss         *@<Esc>:call SendSelectionToR("silent", "stay")<CR>
+-- no \sa         *@:call SendSelectionToR("echo", "down", "normal")<CR>
+-- no \sd         *@:call SendSelectionToR("silent", "down", "normal")<CR>
+-- no \se         *@:call SendSelectionToR("echo", "stay", "normal")<CR>
+-- no \ss         *@:call SendSelectionToR("silent", "stay", "normal")<CR>
+-- v  \fa         *@<Esc>:call SendFunctionToR("echo", "down")<CR>
+-- no \fa         *@:call SendFunctionToR("echo", "down")<CR>
+-- v  \fd         *@<Esc>:call SendFunctionToR("silent", "down")<CR>
+-- no \fd         *@:call SendFunctionToR("silent", "down")<CR>
+-- v  \fe         *@<Esc>:call SendFunctionToR("echo", "stay")<CR>
+-- no \fe         *@:call SendFunctionToR("echo", "stay")<CR>
+-- v  \ff         *@<Esc>:call SendFunctionToR("silent", "stay")<CR>
+-- no \ff         *@:call SendFunctionToR("silent", "stay")<CR>
+--    \ba         *@:call SendMBlockToR("echo", "down")<CR>
+--    \bd         *@:call SendMBlockToR("silent", "down")<CR>
+--    \be         *@:call SendMBlockToR("echo", "stay")<CR>
+--    \bb         *@:call SendMBlockToR("silent", "stay")<CR>
+--    \ks         *@:call RSpin()<CR>
+--    \ao         *@:call ShowRout()<CR>
+--    \ae         *@:call SendFileToR("echo")<CR>
+--    \aa         *@:call SendFileToR("silent")<CR>
+-- v  \rw         *@<Esc>:call RQuit('save')<CR>
+-- no \rw         *@:call RQuit('save')<CR>
+-- v  \rq         *@<Esc>:call RQuit('nosave')<CR>
+-- no \rq         *@:call RQuit('nosave')<CR>
+-- v  \rc         *@<Esc>:call StartR("custom")<CR>
+-- no \rc         *@:call StartR("custom")<CR>v  \rf         *@<Esc>:call StartR("R")<CR>
+-- no \rf         *@:call StartR("R")<CR>
+-- v  <Plug>RSetwd *@<Esc>:call RSetWD()<CR>
+-- no <Plug>RSetwd *@:call RSetWD()<CR>
+-- v  <Plug>RMakeODT *@<Esc>:call RMakeRmd("odt_document")<CR>
+-- no <Plug>RMakeODT *@:call RMakeRmd("odt_document")<CR>
+-- v  <Plug>RMakeHTML *@<Esc>:call RMakeRmd("html_document")<CR>
+-- no <Plug>RMakeHTML *@:call RMakeRmd("html_document")<CR>
+-- v  <Plug>RMakeWord *@<Esc>:call RMakeRmd("word_document")<CR>
+-- no <Plug>RMakeWord *@:call RMakeRmd("word_document")<CR>
+-- v  <Plug>RMakePDFKb *@<Esc>:call RMakeRmd("beamer_presentation")<CR>
+-- no <Plug>RMakePDFKb *@:call RMakeRmd("beamer_presentation")<CR>
+-- v  <Plug>RMakePDFK *@<Esc>:call RMakeRmd("pdf_document")<CR>
+-- no <Plug>RMakePDFK *@:call RMakeRmd("pdf_document")<CR>
+-- v  <Plug>RMakeAll *@<Esc>:call RMakeRmd("all")<CR>
+-- no <Plug>RMakeAll *@:call RMakeRmd("all")<CR>
+-- v  <Plug>RMakeRmd *@<Esc>:call RMakeRmd("default")<CR>
+-- no <Plug>RMakeRmd *@:call RMakeRmd("default")<CR>
+-- v  <Plug>RCloseLists *@<Esc>:call RBrOpenCloseLs("C")<CR>
+-- no <Plug>RCloseLists *@:call RBrOpenCloseLs("C")<CR>
+-- v  <Plug>ROpenLists *@<Esc>:call RBrOpenCloseLs("O")<CR>
+-- no <Plug>ROpenLists *@:call RBrOpenCloseLs("O")<CR>
+-- v  <Plug>RUpdateObjBrowser *@<Esc>:call RObjBrowser()<CR>
+-- no <Plug>RUpdateObjBrowser *@:call RObjBrowser()<CR>
+-- v  <Plug>RSPlot *@<Esc>:call RAction("plotsumm", "v")<CR>
+-- v  <Plug>RPlot *@<Esc>:call RAction("plot", "v")<CR>
+-- v  <Plug>RSummary *@<Esc>:call RAction("summary", "v")<CR>
+-- no <Plug>RSPlot *@:call RAction("plotsumm")<CR>
+-- no <Plug>RPlot *@:call RAction("plot")<CR>
+-- no <Plug>RSummary *@:call RAction("summary")<CR>
+-- v  <Plug>RHelp *@<Esc>:call RAction("help")<CR>
+-- no <Plug>RHelp *@:call RAction("help")<CR>
+-- v  <Plug>RShowEx *@<Esc>:call RAction("example")<CR>
+-- no <Plug>RShowEx *@:call RAction("example")<CR>
+-- v  <Plug>RShowArgs *@<Esc>:call RAction("args")<CR>
+-- no <Plug>RShowArgs *@:call RAction("args")<CR>
+-- v  <Plug>RDputObj *@<Esc>:call RAction("dputtab", "v")<CR>
+-- v  <Plug>RViewDFa *@<Esc>:call RAction("viewobj", "v", ", howto='above 7split', nrows=6")<CR>
+-- v  <Plug>RViewDFv *@<Esc>:call RAction("viewobj", "v", ", howto='vsplit'")<CR>
+-- v  <Plug>RViewDFs *@<Esc>:call RAction("viewobj", "v", ", howto='split'")<CR>
+-- v  <Plug>RViewDF *@<Esc>:call RAction("viewobj", "v")<CR>
+-- v  <Plug>RObjectStr *@<Esc>:call RAction("str", "v")<CR>
+-- v  <Plug>RObjectNames *@<Esc>:call RAction("nvim.names", "v")<CR>
+-- v  <Plug>RObjectPr *@<Esc>:call RAction("print", "v")<CR>
+-- no <Plug>RDputObj *@:call RAction("dputtab")<CR>
+-- no <Plug>RViewDFa *@:call RAction("viewobj", ", howto='above 7split', nrows=6")<CR>
+-- no <Plug>RViewDFv *@:call RAction("viewobj", ", howto='vsplit'")<CR>
+-- no <Plug>RViewDFs *@:call RAction("viewobj", ", howto='split'")<CR>
+-- no <Plug>RViewDF *@:call RAction("viewobj")<CR>
+-- no <Plug>RObjectStr *@:call RAction("str")<CR>
+-- no <Plug>RObjectNames *@:call RAction("nvim.names")<CR>
+-- no <Plug>RObjectPr *@:call RAction("print")<CR>
+-- v  <Plug>RClearAll *@<Esc>:call RClearAll()<CR>
+-- no <Plug>RClearAll *@:call RClearAll()<CR>
+-- v  <Plug>RClearConsole *@<Esc>:call RClearConsole()<CR>
+-- no <Plug>RClearConsole *@:call RClearConsole()<CR>
+-- v  <Plug>RListSpace *@<Esc>:call g:SendCmdToR("ls()")<CR>
+-- no <Plug>RListSpace *@:call g:SendCmdToR("ls()")<CR>
+--    <Plug>RUndebug *@:call RAction("undebug")<CR>
+--    <Plug>RDebug *@:call RAction("debug")<CR>
+--    <Plug>RSendAboveLines *@:call SendAboveLinesToR()<CR>
+--    <Plug>RNRightPart *@:call RSendPartOfLine("right", 0)<CR>
+--    <Plug>RNLeftPart *@:call RSendPartOfLine("left", 0)<CR>
+--    <Plug>RSendMotion *@:set opfunc=SendMotionToR<CR>g@
+-- v  <Plug>(RDSendLineAndInsertOutput) *@<Esc>:call RWarningMsg("This command does not work over a selection of lines.")<CR>
+-- no <Plug>(RDSendLineAndInsertOutput) *@:call SendLineToRAndInsertOutput()<CR>0
+--    <Plug>RDSendLine *@:call SendLineToR("down")<CR>0
+--    <Plug>RSendLine *@:call SendLineToR("stay")<CR>
+--    <Plug>REDSendParagraph *@:call SendParagraphToR("echo", "down")<CR>
+--    <Plug>RDSendParagraph *@:call SendParagraphToR("silent", "down")<CR>
+--    <Plug>RESendParagraph *@:call SendParagraphToR("echo", "stay")<CR>
+--    <Plug>RSendParagraph *@:call SendParagraphToR("silent", "stay")<CR>
+-- v  <Plug>RSendSelAndInsertOutput *@<Esc>:call SendSelectionToR("echo", "stay", "NewtabInsert")<CR>
+-- v  <Plug>REDSendSelection *@<Esc>:call SendSelectionToR("echo", "down")<CR>
+-- v  <Plug>RDSendSelection *@<Esc>:call SendSelectionToR("silent", "down")<CR>
+-- v  <Plug>RESendSelection *@<Esc>:call SendSelectionToR("echo", "stay")<CR>
+-- v  <Plug>RSendSelection *@<Esc>:call SendSelectionToR("silent", "stay")<CR>
+-- no <Plug>REDSendSelection *@:call SendSelectionToR("echo", "down", "normal")<CR>
+-- no <Plug>RDSendSelection *@:call SendSelectionToR("silent", "down", "normal")<CR>
+-- no <Plug>RESendSelection *@:call SendSelectionToR("echo", "stay", "normal")<CR>
+-- no <Plug>RSendSelection *@:call SendSelectionToR("silent", "stay", "normal")<CR>
+-- v  <Plug>RDSendFunction *@<Esc>:call SendFunctionToR("echo", "down")<CR>
+-- no <Plug>RDSendFunction *@:call SendFunctionToR("echo", "down")<CR>
+-- v  <Plug>RSendFunction *@<Esc>:call SendFunctionToR("silent", "stay")<CR>
+-- no <Plug>RSendFunction *@:call SendFunctionToR("silent", "stay")<CR>
+--    <Plug>REDSendMBlock *@:call SendMBlockToR("echo", "down")<CR>
+--    <Plug>RDSendMBlock *@:call SendMBlockToR("silent", "down")<CR>
+--    <Plug>RESendMBlock *@:call SendMBlockToR("echo", "stay")<CR>
+--    <Plug>RSendMBlock *@:call SendMBlockToR("silent", "stay")<CR>
+--    <Plug>RSpinFile *@:call RSpin()<CR>
+--    <Plug>RShowRout *@:call ShowRout()<CR>
+--    <Plug>RESendFile *@:call SendFileToR("echo")<CR>
+--    <Plug>RSendFile *@:call SendFileToR("silent")<CR>
+-- v  <Plug>RSaveClose *@<Esc>:call RQuit('save')<CR>
+-- no <Plug>RSaveClose *@:call RQuit('save')<CR>
+-- v  <Plug>RClose *@<Esc>:call RQuit('nosave')<CR>
+-- no <Plug>RClose *@:call RQuit('nosave')<CR>
+-- v  <Plug>RCustomStart *@<Esc>:call StartR("custom")<CR>
+-- no <Plug>RCustomStart *@:call StartR("custom")<CR>
+-- v  <Plug>RStart *@<Esc>:call StartR("R")<CR>
+-- no <Plug>RStart *@:call StartR("R")<CR>
+-- n  <Space>rÞ   * <Nop>
+-- n  <Space>r    * <Cmd>lua require("which-key").show(" r", {mode = "n", auto = true})<CR>
+-- n  <Space>Þ    * <Nop>
+-- n  <Space>     * <Cmd>lua require("which-key").show(" ", {mode = "n", auto = true})<CR>
+-- x  <Space>mÞ   * <Nop>
+-- x  <Space>Þ    * <Nop>
+-- x  <Space>     * <Cmd>lua require("which-key").show(" ", {mode = "v", auto = true})<CR>
+-- n  <Space>sÞ   * <Nop>
+-- n  <Space>tÞ   * <Nop>
+-- n  <Space>xÞ   * <Nop>
+-- n  <Space>fÞ   * <Nop>
+-- n  <Space>mÞ   * <Nop>
+-- n  <Space>nÞ   * <Nop>
+-- n  <Space>wÞ   * <Nop>
+-- n  <Space>eÞ   * <Nop>
+-- n  <Space>l    * <Lua 482: ~/.config/nvim/lua/sinh/plugins/linting.lua:25>
+--                  Trigger linting for current file
+-- v  <Space>mp   * <Lua 417: ~/.config/nvim/lua/sinh/plugins/formatting.lua:31>
+--                  Format file or range (in visual mode)
+-- n  <Space>mp   * <Lua 413: ~/.config/nvim/lua/sinh/plugins/formatting.lua:31>
+--                  Format file or range (in visual mode)
+-- n  <Space>ws   * <Cmd>SessionSave<CR>
+--                  Save session for auto session root dir
+-- n  <Space>wr   * <Cmd>SessionRestore<CR>
+--                  Restore session for cwd
+-- n  <Space>er   * <Cmd>NvimTreeRefresh<CR>
+--                  Refresh file explorer
+-- n  <Space>ec   * <Cmd>NvimTreeCollapse<CR>
+--                  Collapes file explorer
+-- n  <Space>ef   * <Cmd>NvimTreeFindFileToggle<CR>
+--                  Toggles file explorer on current file
+-- n  <Space>ee   * <Cmd>NvimTreeToggle<CR>
+--                  Toggles file explorer
+-- n  <Space>ft   * <Cmd>TodoTelescope<CR>
+--                  Find todos
+-- n  <Space>fc   * <Cmd>Telescope grep_string<CR>
+--                  Find string under cursor in cwd
+-- n  <Space>fs   * <Cmd>Telescope live_grep<CR>
+--                  Find string in cwd
+-- n  <Space>fr   * <Cmd>Telescope oldfiles<CR>
+--                  Fuzzy find recent files
+-- n  <Space>ff   * <Cmd>Telescope find_files<CR>
+--                  Fuzzy find files in cwd
+-- n  <Space>rl   * :call SendLineToR('stay')<CR>
+--                  Start R Session
+-- n  <Space>rr   * :call StartR('R')<CR>
+--                  Start R Session
+-- n  <Space>lg   * <Lua 42: ~/.local/share/nvim/lazy/lazy.nvim/lua/lazy/core/handler/keys.lua:112>
+--                  Open lazy git
+-- n  <Space>xl   * <Lua 41: ~/.local/share/nvim/lazy/lazy.nvim/lua/lazy/core/handler/keys.lua:112>
+--                  Open trouble location list
+-- n  <Space>xq   * <Lua 40: ~/.local/share/nvim/lazy/lazy.nvim/lua/lazy/core/handler/keys.lua:112>
+--                  Open trouble quickfix list
+-- n  <Space>xd   * <Lua 39: ~/.local/share/nvim/lazy/lazy.nvim/lua/lazy/core/handler/keys.lua:112>
+--                  Open trouble document diagnostics
+-- n  <Space>xw   * <Lua 38: ~/.local/share/nvim/lazy/lazy.nvim/lua/lazy/core/handler/keys.lua:112>
+--                  Open trouble workspace diagnostics
+-- n  <Space>xx   * <Lua 37: ~/.local/share/nvim/lazy/lazy.nvim/lua/lazy/core/handler/keys.lua:112>
+--                  Open/close trouble list
+-- n  <Space>xt   * <Lua 36: ~/.local/share/nvim/lazy/lazy.nvim/lua/lazy/core/handler/keys.lua:112>
+--                  Open todos in trouble
+-- n  <Space>sm   * <Lua 30: ~/.local/share/nvim/lazy/lazy.nvim/lua/lazy/core/handler/keys.lua:112>
+--                  Maximize/minimize a split
+-- n  <Space>tf   * <Cmd>tabnew %<CR>
+--                  Open current buffer in new tab
+-- n  <Space>tp   * <Cmd>tabp<CR>
+--                  Go to previous tab
+-- n  <Space>tn   * <Cmd>tabn<CR>
+--                  Go to next tab
+-- n  <Space>tx   * <Cmd>tabclose<CR>
+--                  Close current tab
+-- n  <Space>to   * <Cmd>tabnew<CR>
+--                  Open new tab
+-- n  <Space>sx   * <Cmd>close<CR>
+--                  Close current split
+-- n  <Space>se   * <C-W>=
+--                  Make splits equal size
+-- n  <Space>sh   * <C-W>s
+--                  Split window horizontally
+-- n  <Space>sv   * <C-W>v
+--                  split window vertically
+-- n  <Space>-    * <C-X>
+--                  Decrement number
+-- n  <Space>+    * <C-A>
+--                  Increment number
+-- n  <Space>nh   * :nohl<CR>
+--                  Clear search highlights
+-- n  !aÞ         * <Nop>
+-- n  !iÞ         * <Nop>
+-- n  !Þ          * <Nop>
+-- n  !           * <Cmd>lua require("which-key").show("!", {mode = "n", auto = true})<CR>
+-- x  "           * <Cmd>lua require("which-key").show("\"", {mode = "v", auto = true})<CR>
+-- n  "           * <Cmd>lua require("which-key").show("\"", {mode = "n", auto = true})<CR>
+-- x  #           * <Lua 7: vim/_defaults.lua:0>
+--                  :help v_#-default
+-- o  %             <Plug>(MatchitOperationForward)
+-- x  %             <Plug>(MatchitVisualForward)
+-- n  %             <Plug>(MatchitNormalForward)
+-- n  &           * :&&<CR>
+--                  :help &-default
+-- n  '           * <Cmd>lua require("which-key").show("'", {mode = "n", auto = true})<CR>
+-- x  *           * <Lua 3: vim/_defaults.lua:0>
+--                  :help v_star-default
+-- n  <aÞ         * <Nop>
+-- n  <iÞ         * <Nop>
+-- n  <Þ          * <Nop>
+-- n  <           * <Cmd>lua require("which-key").show("<", {mode = "n", auto = true})<CR>
+-- n  >aÞ         * <Nop>
+-- n  >iÞ         * <Nop>
+-- n  >Þ          * <Nop>
+-- n  >           * <Cmd>lua require("which-key").show(">", {mode = "n", auto = true})<CR>
+-- x  @           * mode() == 'V' ? ':normal! @'.getcharstr().'<CR>' : '@'
+--                  :help v_@-default
+-- x  Q           * mode() == 'V' ? ':normal! @<C-R>=reg_recorded()<CR><CR>' : 'Q'
+--                  :help v_Q-default
+-- x  S           * <Plug>(nvim-surround-visual)
+--                  Add a surrounding pair around a visual selection
+-- n  S           * <Lua 394: ~/.local/share/nvim/lazy/substitute.nvim/lua/substitute.lua:92>
+--                  Substitute to end of line
+-- n  Y           * y$
+--                  :help Y-default
+-- x  [Þ          * <Nop>
+-- x  [           * <Cmd>lua require("which-key").show("[", {mode = "v", auto = true})<CR>
+-- n  [Þ          * <Nop>
+-- n  [           * <Cmd>lua require("which-key").show("[", {mode = "n", auto = true})<CR>
+-- o  [%            <Plug>(MatchitOperationMultiBackward)
+-- x  [%            <Plug>(MatchitVisualMultiBackward)
+-- n  [%            <Plug>(MatchitNormalMultiBackward)
+-- n  [t          * <Lua 132: ~/.config/nvim/lua/sinh/plugins/todo-comments.lua:16>
+--                  Previous todo comment
+-- n  [d          * <Lua 15: vim/_defaults.lua:0>
+--                  Jump to the previous diagnostic
+-- x  ]Þ          * <Nop>
+-- x  ]           * <Cmd>lua require("which-key").show("]", {mode = "v", auto = true})<CR>
+-- n  ]Þ          * <Nop>
+-- n  ]           * <Cmd>lua require("which-key").show("]", {mode = "n", auto = true})<CR>
+-- o  ]%            <Plug>(MatchitOperationMultiForward)
+-- x  ]%            <Plug>(MatchitVisualMultiForward)
+-- n  ]%            <Plug>(MatchitNormalMultiForward)
+-- n  ]t          * <Lua 131: ~/.config/nvim/lua/sinh/plugins/todo-comments.lua:12>
+--                  Next todo comment
+-- n  ]d          * <Lua 14: vim/_defaults.lua:0>
+--                  Jump to the next diagnostic
+-- n  `           * <Cmd>lua require("which-key").show("`", {mode = "n", auto = true})<CR>
+-- x  a%            <Plug>(MatchitVisualTextObject)
+-- n  ciÞ         * <Nop>
+-- n  caÞ         * <Nop>
+-- n  cÞ          * <Nop>
+-- n  c           * <Cmd>lua require("which-key").show("c", {mode = "n", auto = true})<CR>
+-- n  cS          * <Plug>(nvim-surround-change-line)
+--                  Change a surrounding pair, putting replacements on new lines
+-- n  cs          * <Plug>(nvim-surround-change)
+--                  Change a surrounding pair
+-- n  diÞ         * <Nop>
+-- n  daÞ         * <Nop>
+-- n  dÞ          * <Nop>
+-- n  d           * <Cmd>lua require("which-key").show("d", {mode = "n", auto = true})<CR>
+-- n  ds          * <Plug>(nvim-surround-delete)
+--                  Delete a surrounding pair
+-- x  gÞ          * <Nop>
+-- x  g           * <Cmd>lua require("which-key").show("g", {mode = "v", auto = true})<CR>
+-- n  guaÞ        * <Nop>
+-- n  guiÞ        * <Nop>
+-- n  guÞ         * <Nop>
+-- n  gUaÞ        * <Nop>
+-- n  gUiÞ        * <Nop>
+-- n  gUÞ         * <Nop>
+-- n  g~aÞ        * <Nop>
+-- n  g~iÞ        * <Nop>
+-- n  g~Þ         * <Nop>
+-- n  gÞ          * <Nop>
+-- n  g           * <Cmd>lua require("which-key").show("g", {mode = "n", auto = true})<CR>
+-- n  gcA         * <Lua 477: ~/.local/share/nvim/lazy/Comment.nvim/lua/Comment/api.lua:218>
+--                  Comment insert end of line
+-- n  gcO         * <Lua 476: ~/.local/share/nvim/lazy/Comment.nvim/lua/Comment/api.lua:179>
+--                  Comment insert above
+-- n  gco         * <Lua 11: ~/.local/share/nvim/lazy/Comment.nvim/lua/Comment/api.lua:182>
+--                  Comment insert below
+-- x  gb          * <Plug>(comment_toggle_blockwise_visual)
+--                  Comment toggle blockwise (visual)
+-- n  gbc         * <Lua 12: ~/.local/share/nvim/lazy/Comment.nvim/lua/Comment/init.lua:107>
+--                  Comment toggle current block
+-- n  gb          * <Plug>(comment_toggle_blockwise)
+--                  Comment toggle blockwise
+-- x  gS          * <Plug>(nvim-surround-visual-line)
+--                  Add a surrounding pair around a visual selection, on new lines
+-- o  g%            <Plug>(MatchitOperationBackward)
+-- x  g%            <Plug>(MatchitVisualBackward)
+-- n  g%            <Plug>(MatchitNormalBackward)
+-- o  gc          * <Lua 13: vim/_defaults.lua:0>
+--                  Comment textobject
+-- n  gcc         * <Lua 10: ~/.local/share/nvim/lazy/Comment.nvim/lua/Comment/init.lua:103>
+--                  Comment toggle current line
+-- x  gc          * <Plug>(comment_toggle_linewise_visual)
+--                  Comment toggle linewise (visual)
+-- n  gc          * <Plug>(comment_toggle_linewise)
+--                  Comment toggle linewise
+-- x  gx          * <Lua 9: vim/_defaults.lua:0>
+--                  Opens filepath or URI under cursor with the system handler (file explorer, web browser, …)
+-- n  gx          * <Lua 8: vim/_defaults.lua:0>
+--                  Opens filepath or URI under cursor with the system handler (file explorer, web browser, …)
+-- x  s           * <Lua 395: ~/.local/share/nvim/lazy/substitute.nvim/lua/substitute.lua:102>
+--                  Substitute in visual mode
+-- n  ss          * <Lua 393: ~/.local/share/nvim/lazy/substitute.nvim/lua/substitute.lua:81>
+--                  Substitute line
+-- n  s           * <Lua 392: ~/.local/share/nvim/lazy/substitute.nvim/lua/substitute.lua:25>
+--                  Substitute with motion
