@@ -52,6 +52,7 @@ return {
         'eslint_d',
         'jupytext',
         'cpplint',
+        'clang-format',
       },
     }
   end,
