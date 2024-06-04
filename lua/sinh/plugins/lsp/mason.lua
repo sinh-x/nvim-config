@@ -38,6 +38,7 @@ return {
         'prismals',
         'pyright',
         'r_language_server',
+        'clangd',
       },
     }
 
@@ -50,6 +51,7 @@ return {
         'pylint',
         'eslint_d',
         'jupytext',
+        'cpplint',
       },
     }
   end,
