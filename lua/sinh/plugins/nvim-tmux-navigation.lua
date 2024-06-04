@@ -15,6 +15,5 @@ return {
     keymap.set('n', '<C-Up>', nvim_tmux_nav.NvimTmuxNavigateUp)
     keymap.set('n', '<C-Right>', nvim_tmux_nav.NvimTmuxNavigateRight)
     keymap.set('n', '<C-\\>', nvim_tmux_nav.NvimTmuxNavigateLastActive)
-    keymap.set('n', '<C-Space>', nvim_tmux_nav.NvimTmuxNavigateNext)
   end,
 }
