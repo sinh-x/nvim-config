@@ -1,5 +1,5 @@
--- Mapping data with "desc" stored directly by vim.keymap.set().
---
+--[[ -- Mapping data with "desc" stored directly by vim.keymap.set().
+-- ]]
 -- Please use this mapping table to set keyboard mabbing since this is the
 -- lower level configuration and more robust one. (which-key will
 -- automatically pick-up stored data by this setting.)
