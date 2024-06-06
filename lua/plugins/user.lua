@@ -98,4 +98,35 @@ return {
       keymap.set('n', '<C-\\>', nvim_tmux_nav.NvimTmuxNavigateLastActive)
     end,
   },
+  -- neorg setup
+  {
+    'vhyrro/luarocks.nvim',
+    priority = 1000,
+    config = true,
+  },
+  {
+    'nvim-neorg/neorg',
+    dependencies = { 'luarocks.nvim' },
+    lazy = false, -- Disable lazy loading as some `lazy.nvim` distributions set `lazy = true` by default
+    version = '*', -- Pin Neorg to the latest stable release
+    config = true,
+  },
+  -- qmk setup
+  {
+    'codethread/qmk.nvim',
+    config = function()
+      ---@type qmk.UserConfig
+      local conf = {
+        name = 'LAYOUT_sinh_x_58',
+        layout = {
+          '_ x x x x x x _ _ _ x x x x x x',
+          '_ x x x x x x _ _ _ x x x x x x',
+          '_ x x x x x x _ _ _ x x x x x x',
+          '_ x x x x x x x _ x x x x x x x',
+          '_ _ _ x x x x x _ x x x x x _ _',
+        },
+      }
+      require('qmk').setup(conf)
+    end,
+  },
 }
