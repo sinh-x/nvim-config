@@ -15,3 +15,6 @@ end
 
 require 'lazy_setup'
 require 'polish'
+
+local o = vim.opt
+o.conceallevel = 2
