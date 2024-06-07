@@ -80,6 +80,26 @@ return {
   },
 
   {
+    'nvim-neo-tree/neo-tree.nvim',
+    opts = function(_, opts)
+      -- opts parameter is the default options table
+      -- the function is lazy loaded so cmp is able to be required
+      local cmp = require 'neo-tree'
+      -- make sure there is a `mapping` table in the `opts`
+      if not opts.mapping then opts.mapping = {} end
+      -- modify the mapping part of the table
+      opts.mapping['a'] = {
+        'add',
+        -- this command supports BASH style brace expansion ("x{a,b,c}" -> xa,xb,xc). see `:h neo-tree-file-actions` for details
+        -- some commands may take optional config options, see `:h neo-tree-mappings` for details
+        config = {
+          show_path = 'relative', -- "none", "relative", "absolute"
+        },
+      }
+    end,
+  },
+
+  {
     'alexghergh/nvim-tmux-navigation',
     config = function()
       local nvim_tmux_nav = require 'nvim-tmux-navigation'
