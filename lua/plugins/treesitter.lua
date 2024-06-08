@@ -25,5 +25,6 @@ return {
       'c',
       -- add more arguments for adding more treesitter parsers
     })
+    opts.highlight = { enable = true }
   end,
 }

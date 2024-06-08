@@ -176,6 +176,21 @@ return {
         },
       },
       -- see below for full list of options 👇
+      daily_notes = {
+        -- Optional, if you keep daily notes in a separate directory.
+        folder = 'dailies',
+        -- Optional, if you want to change the date format for the ID of daily notes.
+        date_format = '%Y-%m-%d',
+        -- Optional, if you want to change the date format of the default alias of daily notes.
+        alias_format = '%B %-d, %Y',
+        -- Optional, if you want to automatically insert a template from your template directory like 'daily.md'
+        template = nil,
+      },
+      templates = {
+        folder = 'Templates',
+        date_format = '%Y-%m-%d-%a',
+        time_format = '%H:%M',
+      },
     },
   },
   -- markdown preview
@@ -194,5 +209,30 @@ return {
       -- or leave it empty to use the default settings
       -- refer to the configuration section below
     },
+  },
+  -- Disable neo-tree
+  {
+    'nvim-neotree/neo-tree.nvim',
+    enabled = false,
+  },
+  -- code outline --
+  {
+    'hedyhli/outline.nvim',
+    config = function()
+      -- Example mapping to toggle outline
+      vim.keymap.set('n', '<leader>o', '<cmd>Outline<CR>', { desc = 'Toggle Outline' })
+
+      require('outline').setup {
+        -- Your setup opts here (leave empty to use defaults)
+      }
+    end,
+  },
+  -- improve command input ui
+  {
+    'VonHeikemen/fine-cmdline.nvim',
+    requires = {
+      { 'MunifTanjim/nui.nvim' },
+    },
+    config = function() vim.api.nvim_set_keymap('n', '<C-f>', '<cmd>FineCmdline<CR>', { desc = 'Open fine cmd' }) end,
   },
 }
