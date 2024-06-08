@@ -175,4 +175,9 @@ return {
       -- refer to the configuration section below
     },
   },
+  -- Disable neo-tree
+  {
+    'nvim-neotree/neo-tree.nvim',
+    enabled = false,
+  },
 }
