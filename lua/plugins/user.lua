@@ -192,4 +192,12 @@ return {
       }
     end,
   },
+  -- improve command input ui
+  {
+    'VonHeikemen/fine-cmdline.nvim',
+    requires = {
+      { 'MunifTanjim/nui.nvim' },
+    },
+    config = function() vim.api.nvim_set_keymap('n', '<CR>', '<cmd>FineCmdline<CR>', { noremap = true }) end,
+  },
 }
