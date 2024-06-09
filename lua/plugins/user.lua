@@ -78,27 +78,7 @@ return {
       )
     end,
   },
-
-  {
-    'nvim-neo-tree/neo-tree.nvim',
-    opts = function(_, opts)
-      -- opts parameter is the default options table
-      -- the function is lazy loaded so cmp is able to be required
-      local cmp = require 'neo-tree'
-      -- make sure there is a `mapping` table in the `opts`
-      if not opts.mapping then opts.mapping = {} end
-      -- modify the mapping part of the table
-      opts.mapping['a'] = {
-        'add',
-        -- this command supports BASH style brace expansion ("x{a,b,c}" -> xa,xb,xc). see `:h neo-tree-file-actions` for details
-        -- some commands may take optional config options, see `:h neo-tree-mappings` for details
-        config = {
-          show_path = 'relative', -- "none", "relative", "absolute"
-        },
-      }
-    end,
-  },
-
+  -- nvim-tmux-navigation
   {
     'alexghergh/nvim-tmux-navigation',
     config = function()
@@ -106,10 +86,22 @@ return {
 
       nvim_tmux_nav.setup {
         disable_when_zoomed = true, -- defaults to false
+        keybindings = {
+          -- left = '<C-Left>',
+          -- down = '<C-Down>',
+          -- up = '<C-Up>',
+          -- right = '<C-Right>',
+          -- last_active = '<C-\\>',
+          -- next = '<C-Spacer',
+        },
       }
 
       -- set keymaps
       local keymap = vim.keymap
+      keymap.set('n', '<C-Left>', '<cmd>winc h<cr>', { desc = 'Move to left split' })
+      keymap.set('n', '<C-Down>', '<cmd>winc j<cr>', { desc = 'Move to down split' })
+      keymap.set('n', '<C-Up>', '<cmd>winc k<cr>', { desc = 'Move to up split' })
+      keymap.set('n', '<C-Right>', '<cmd>winc l<cr>', { desc = 'Move to right split' })
 
       keymap.set('n', '<C-Left>', nvim_tmux_nav.NvimTmuxNavigateLeft)
       keymap.set('n', '<C-Down>', nvim_tmux_nav.NvimTmuxNavigateDown)
