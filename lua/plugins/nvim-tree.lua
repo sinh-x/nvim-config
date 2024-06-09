@@ -12,6 +12,17 @@ return {
       view = {
         width = 35,
         relativenumber = true,
+        float = {
+          enable = true,
+          open_win_config = {
+            relative = 'editor',
+            border = 'rounded',
+            width = 120,
+            height = 30,
+            row = 8,
+            col = 30,
+          },
+        },
       },
       -- change folder arrow icons
       renderer = {
@@ -26,6 +37,9 @@ return {
             },
           },
         },
+      },
+      update_focused_file = {
+        enable = true,
       },
       -- disable window_picker for
       -- explorer to work well with
@@ -49,6 +63,7 @@ return {
     local keymap = vim.keymap -- for conciseness
 
     keymap.set('n', '<leader>ee', '<cmd>NvimTreeToggle<CR>', { desc = 'Toggle file explorer' }) -- toggle file explorer
+    keymap.set('n', '<leader>eo', '<cmd>NvimTreeFocus<CR>', { desc = 'Focus file explorer' }) -- focus file explorer
     keymap.set('n', '<leader>ef', '<cmd>NvimTreeFindFileToggle<CR>', { desc = 'Toggle file explorer on current file' }) -- toggle file explorer on current file
     keymap.set('n', '<leader>ec', '<cmd>NvimTreeCollapse<CR>', { desc = 'Collapse file explorer' }) -- collapse file explorer
     keymap.set('n', '<leader>er', '<cmd>NvimTreeRefresh<CR>', { desc = 'Refresh file explorer' }) -- refresh file explorer
