@@ -78,7 +78,7 @@ return {
       )
     end,
   },
-
+  -- nvim-tmux-navigation
   {
     'alexghergh/nvim-tmux-navigation',
     config = function()
@@ -86,10 +86,22 @@ return {
 
       nvim_tmux_nav.setup {
         disable_when_zoomed = true, -- defaults to false
+        keybindings = {
+          -- left = '<C-Left>',
+          -- down = '<C-Down>',
+          -- up = '<C-Up>',
+          -- right = '<C-Right>',
+          -- last_active = '<C-\\>',
+          -- next = '<C-Spacer',
+        },
       }
 
       -- set keymaps
       local keymap = vim.keymap
+      keymap.set('n', '<C-Left>', '<cmd>winc h<cr>', { desc = 'Move to left split' })
+      keymap.set('n', '<C-Down>', '<cmd>winc j<cr>', { desc = 'Move to down split' })
+      keymap.set('n', '<C-Up>', '<cmd>winc k<cr>', { desc = 'Move to up split' })
+      keymap.set('n', '<C-Right>', '<cmd>winc l<cr>', { desc = 'Move to right split' })
 
       keymap.set('n', '<C-Left>', nvim_tmux_nav.NvimTmuxNavigateLeft)
       keymap.set('n', '<C-Down>', nvim_tmux_nav.NvimTmuxNavigateDown)
