@@ -34,7 +34,6 @@ return {
       g = { -- vim.g.<key>
         -- configure global vim variables (vim.g)
         -- NOTE: `mapleader` and `maplocalleader` must be set in the AstroNvim opts or before `lazy.setup`
-        -- This can be found in the `lua/lazy_setup.lua` file
       },
     },
     -- Mappings can be configured through AstroCore as well.
@@ -56,6 +55,12 @@ return {
           desc = 'Close buffer from tabline',
         },
 
+        -- Split navigations
+        ['<C-Left>'] = {
+          '<cmd>winc h<cr>',
+          desc = 'Move to left split',
+        },
+        ['<C-h>'] = false,
         -- tables with just a `desc` key will be registered with which-key if it's installed
         -- this is useful for naming menus
         -- ["<Leader>b"] = { desc = "Buffers" },
