@@ -129,6 +129,20 @@ return {
   },
   -- setup obsidian
   {
+    'oflisback/obsidian-bridge.nvim',
+    dependencies = { 'nvim-telescope/telescope.nvim', 'nvim-lua/plenary.nvim' },
+    config = function()
+      require('obsidian-bridge').setup {
+        obsidian_server_address = 'http://localhost:27123',
+      }
+    end,
+    event = {
+      'BufReadPre *.md',
+      'BufNewFile *.md',
+    },
+    lazy = true,
+  },
+  {
     'epwalsh/obsidian.nvim',
     version = '*', -- recommended, use latest release instead of latest commit
     lazy = true,
@@ -190,7 +204,7 @@ return {
   },
   -- Disable neo-tree
   {
-    'nvim-neotree/neo-tree.nvim',
+    'nvim-neo-tree/neo-tree.nvim',
     enabled = false,
   },
   -- code outline --
