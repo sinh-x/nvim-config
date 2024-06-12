@@ -78,24 +78,195 @@ return {
       )
     end,
   },
-
+  -- nvim-tmux-navigation
   {
-    'alexghergh/nvim-tmux-navigation',
+    'christoomey/vim-tmux-navigator',
+    cmd = {
+      'TmuxNavigateLeft',
+      'TmuxNavigateDown',
+      'TmuxNavigateUp',
+      'TmuxNavigateRight',
+      'TmuxNavigatePrevious',
+    },
+    keys = {
+      { '<c-Left>', '<cmd><C-U>TmuxNavigateLeft<cr>' },
+      { '<c-Down>', '<cmd><C-U>TmuxNavigateDown<cr>' },
+      { '<c-Up>', '<cmd><C-U>TmuxNavigateUp<cr>' },
+      { '<c-Right>', '<cmd><C-U>TmuxNavigateRight<cr>' },
+      { '<c-\\>', '<cmd><C-U>TmuxNavigatePrevious<cr>' },
+    },
+  },
+  -- neorg setup
+  {
+    'vhyrro/luarocks.nvim',
+    priority = 1000,
+    config = true,
+  },
+  {
+    'nvim-neorg/neorg',
+    dependencies = { 'luarocks.nvim' },
+    lazy = false, -- Disable lazy loading as some `lazy.nvim` distributions set `lazy = true` by default
+    version = '*', -- Pin Neorg to the latest stable release
+    config = true,
+  },
+  -- qmk setup
+  {
+    'codethread/qmk.nvim',
     config = function()
-      local nvim_tmux_nav = require 'nvim-tmux-navigation'
-
-      nvim_tmux_nav.setup {
-        disable_when_zoomed = true, -- defaults to false
+      ---@type qmk.UserConfig
+      local conf = {
+        name = 'LAYOUT_sinh_x_58',
+        layout = {
+          '_ x x x x x x _ _ _ x x x x x x',
+          '_ x x x x x x _ _ _ x x x x x x',
+          '_ x x x x x x _ _ _ x x x x x x',
+          '_ x x x x x x x _ x x x x x x x',
+          '_ _ _ x x x x x _ x x x x x _ _',
+        },
       }
+      require('qmk').setup(conf)
+    end,
+  },
+  -- setup obsidian
+  {
+    'oflisback/obsidian-bridge.nvim',
+    dependencies = { 'nvim-telescope/telescope.nvim', 'nvim-lua/plenary.nvim' },
+    config = function()
+      require('obsidian-bridge').setup {
+        obsidian_server_address = 'http://localhost:27123',
+      }
+    end,
+    event = {
+      'BufReadPre *.md',
+      'BufNewFile *.md',
+    },
+    lazy = true,
+  },
+  {
+    'epwalsh/obsidian.nvim',
+    version = '*', -- recommended, use latest release instead of latest commit
+    lazy = true,
+    ft = 'markdown',
+    -- Replace the above line with this if you only want to load obsidian.nvim for markdown files in your vault:
+    -- event = {
+    --   -- If you want to use the home shortcut '~' here you need to call 'vim.fn.expand'.
+    --   -- E.g. "BufReadPre " .. vim.fn.expand "~" .. "/my-vault/**.md"
+    --   "BufReadPre path/to/my-vault/**.md",
+    --   "BufNewFile path/to/my-vault/**.md",
+    -- },
+    dependencies = {
+      -- Required.
+      'nvim-lua/plenary.nvim',
 
-      -- set keymaps
-      local keymap = vim.keymap
+      -- see below for full list of optional dependencies 👇
+    },
+    opts = {
+      workspaces = {
+        {
+          name = 'personal',
+          path = '~/Documents/Sinh-organized',
+        },
+      },
+      -- see below for full list of options 👇
+      daily_notes = {
+        -- Optional, if you keep daily notes in a separate directory.
+        folder = 'dailies',
+        -- Optional, if you want to change the date format for the ID of daily notes.
+        date_format = '%Y-%m-%d',
+        -- Optional, if you want to change the date format of the default alias of daily notes.
+        alias_format = '%B %-d, %Y',
+        -- Optional, if you want to automatically insert a template from your template directory like 'daily.md'
+        template = nil,
+      },
+      templates = {
+        folder = 'Templates',
+        date_format = '%Y-%m-%d-%a',
+        time_format = '%H:%M',
+      },
+    },
+  },
+  -- markdown preview
+  {
+    'iamcco/markdown-preview.nvim',
+    cmd = { 'MarkdownPreviewToggle', 'MarkdownPreview', 'MarkdownPreviewStop' },
+    build = 'cd app && yarn install',
+    init = function() vim.g.mkdp_filetypes = { 'markdown' } end,
+    ft = { 'markdown' },
+  },
+  -- Zen mode
+  {
+    'folke/zen-mode.nvim',
+    opts = {
+      -- your configuration comes here
+      -- or leave it empty to use the default settings
+      -- refer to the configuration section below
+    },
+  },
+  -- Disable neo-tree
+  {
+    'nvim-neo-tree/neo-tree.nvim',
+    enabled = false,
+  },
+  -- code outline --
+  {
+    'hedyhli/outline.nvim',
+    config = function()
+      -- Example mapping to toggle outline
+      vim.keymap.set('n', '<leader>o', '<cmd>Outline<CR>', { desc = 'Toggle Outline' })
 
-      keymap.set('n', '<C-Left>', nvim_tmux_nav.NvimTmuxNavigateLeft)
-      keymap.set('n', '<C-Down>', nvim_tmux_nav.NvimTmuxNavigateDown)
-      keymap.set('n', '<C-Up>', nvim_tmux_nav.NvimTmuxNavigateUp)
-      keymap.set('n', '<C-Right>', nvim_tmux_nav.NvimTmuxNavigateRight)
-      keymap.set('n', '<C-\\>', nvim_tmux_nav.NvimTmuxNavigateLastActive)
+      require('outline').setup {
+        -- Your setup opts here (leave empty to use defaults)
+      }
+    end,
+  },
+  -- improve command input ui
+  {
+    'VonHeikemen/fine-cmdline.nvim',
+    requires = {
+      { 'MunifTanjim/nui.nvim' },
+    },
+    config = function() vim.api.nvim_set_keymap('n', '<C-f>', '<cmd>FineCmdline<CR>', { desc = 'Open fine cmd' }) end,
+  },
+  -- vim marks
+  {
+    'chentoast/marks.nvim',
+    config = function()
+      require('marks').setup {
+        -- whether to map keybinds or not. default true
+        default_mappings = true,
+        -- which builtin marks to show. default {}
+        builtin_marks = { '.', '<', '>', '^' },
+        -- whether movements cycle back to the beginning/end of buffer. default true
+        cyclic = true,
+        -- whether the shada file is updated after modifying uppercase marks. default false
+        force_write_shada = false,
+        -- how often (in ms) to redraw signs/recompute mark positions.
+        -- higher values will have better performance but may cause visual lag,
+        -- while lower values may cause performance penalties. default 150.
+        refresh_interval = 250,
+        -- sign priorities for each type of mark - builtin marks, uppercase marks, lowercase
+        -- marks, and bookmarks.
+        -- can be either a table with all/none of the keys, or a single number, in which case
+        -- the priority applies to all marks.
+        -- default 10.
+        sign_priority = { lower = 10, upper = 15, builtin = 8, bookmark = 20 },
+        -- disables mark tracking for specific filetypes. default {}
+        excluded_filetypes = {},
+        -- disables mark tracking for specific buftypes. default {}
+        excluded_buftypes = {},
+        -- marks.nvim allows you to configure up to 10 bookmark groups, each with its own
+        -- sign/virttext. Bookmarks can be used to group together positions and quickly move
+        -- across multiple buffers. default sign is '!@#$%^&*()' (from 0 to 9), and
+        -- default virt_text is "".
+        bookmark_0 = {
+          sign = '⚑',
+          virt_text = 'hello world',
+          -- explicitly prompt for a virtual line annotation when setting a bookmark from this group.
+          -- defaults to false.
+          annotate = false,
+        },
+        mappings = {},
+      }
     end,
   },
 }
