@@ -18,6 +18,7 @@ return {
   config = function()
     local cmp = require 'cmp'
 
+    require('cmp_r').setup {}
     local luasnip = require 'luasnip'
 
     local lspkind = require 'lspkind'

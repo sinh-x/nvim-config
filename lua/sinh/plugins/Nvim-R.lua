@@ -1,19 +1,27 @@
 return {
-  'jalvesaq/Nvim-R',
-  dependencies = {
-    'hrsh7th/nvim-cmp',
-    'jalvesaq/cmp-nvim-r',
+  {
+    'R-nvim/R.nvim',
+    lazy = false,
   },
-  config = function()
-    -- TODO: setup keyshortut for Nvim-R
-
-    -- set keymap
-    local keymap = vim.keymap -- for consiseness
-
-    keymap.set('n', '<leader>rr', ":call StartR('R')<CR>", { desc = 'Start R Session' })
-    keymap.set('n', '<leader>rl', ":call SendLineToR('stay')<CR>", { desc = 'Start R Session' })
-  end,
+  'R-nvim/cmp-r',
 }
+
+-- return {
+--   'jalvesaq/Nvim-R',
+--   dependencies = {
+--     'hrsh7th/nvim-cmp',
+--     'jalvesaq/cmp-nvim-r',
+--   },
+--   config = function()
+--     -- TODO: setup keyshortut for Nvim-R
+--
+--     -- set keymap
+--     local keymap = vim.keymap -- for consiseness
+--
+--     keymap.set('n', '<leader>rr', ":call StartR('R')<CR>", { desc = 'Start R Session' })
+--     keymap.set('n', '<leader>rl', ":call SendLineToR('stay')<CR>", { desc = 'Start R Session' })
+--   end,
+-- }
 
 --
 -- n  \           *@<Cmd>lua require("which-key").show("\\", {mode = "n", auto = true})<CR>
