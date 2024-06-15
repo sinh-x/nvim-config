@@ -20,6 +20,17 @@ understand the basics of Lua and configuration parameters, the choice of
 distribution becomes less important, allowing you to focus on what truly
 matters: coding and getting work done.
 
+## Overview of the setup
+
+The goal of this setup is to provide a robust environment for R programming.
+It includes the following features:
+
+- Treesitter compatibility with R language support.
+- Neonvim fully setupwith auto-completion, linting, and formatting capabilities.
+
+These are the primary features, in addition to others already incorporated in
+LazyVim. You're welcome to clone and experiment with this setup for your own use.
+
 ## LazyVim
 
 LazyVim is a starter template that I'm currently using. You can find more
