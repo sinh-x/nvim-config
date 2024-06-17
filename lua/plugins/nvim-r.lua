@@ -13,6 +13,7 @@ return {
   -- The third plugin is hrsh7th/nvim-cmp, which is a completion engine for Neovim.
   {
     "hrsh7th/nvim-cmp",
+    dependencies = { "hrsh7th/cmp-emoji" },
     -- The opts function is used to configure the plugin. Thist take the example provided on LazyVim website.
     -- And added the sources sections for better auto-completion.
     opts = function(_, opts)
@@ -26,6 +27,7 @@ return {
       local cmp = require("cmp")
 
       -- Here we are configuring the mappings for the plugin.
+      -- Tap for next / Shift + Tab for previous
       opts.mapping = vim.tbl_extend("force", opts.mapping, {
         ["<Tab>"] = cmp.mapping(function(fallback)
           -- If the completion menu is visible, select the next item.
@@ -60,43 +62,28 @@ return {
         end, { "i", "s" }),
       })
 
-      -- Here we are configuring the sources for the plugin.
-      opts.soucres = vim.tbl_extend("force", opts.sources, {
-        { name = "copilot" },
-        { name = "luasnip" },
-        { name = "cmp_r" },
-        { name = "nvim_lua" },
-        { name = "nvim_lsp" },
-        { name = "buffer" },
-        { name = "path", option = { trailing_slash = false } },
-      })
-    end,
-  },
-  -- The fourth plugin is stevearc/conform.nvim, which is a code formatter for Neovim.
-  {
-    "stevearc/conform.nvim",
-    opts = function(_, opts)
-      local conform = require("conform")
-
-      -- Here we are configuring the formatters for the plugin using local script prettify for R.
-      -- Content of thes script is as below. Make sure it executable and in  bin PATH.
-      -- #!/usr/bin/env sh
-      -- cp "$1" "$1".bak
-      -- R --quiet --no-echo -e "styler::style_file(\"$1\")" 1>/dev/null 2>&1
-      -- cat "$1"
-
-      opts.formatters = vim.tbl_extend("force", opts.formatters, {
-        rprettify = {
-          inherit = "false",
-          stdin = false,
-          command = "rprettify",
-          args = { "$FILENAME" },
+      -- -- Here we are configuring the sources for the plugin.
+      -- 1 - r language server
+      -- 2 - r objects
+      -- 3 - path
+      -- I have to remeve the 3rd source which is cmp-path configure byth LazyVim
+      -- and switch to my configuration
+      for i = 1, #opts.sources do
+        if opts.sources[i].name == "path" then
+          table.remove(opts.sources, i)
+          break
+        end
+      end
+      -- table.remove(opts.sources, 3)
+      table.insert(opts.sources, {
+        name = "path",
+        option = {
+          trailing_slash = false,
+          label_trailing_slash = true,
+          get_cwd = function()
+            return vim.fn.getcwd()
+          end,
         },
-      })
-
-      -- Here we are added the local prettify for R into the list of formatterr by file type or the plugin.
-      opts.formatters_by_ft = vim.tbl_extend("force", opts.formatters_by_ft, {
-        r = { "rprettify" },
       })
     end,
   },
