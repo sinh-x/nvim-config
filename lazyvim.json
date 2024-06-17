@@ -16,6 +16,7 @@
     "lazyvim.plugins.extras.editor.mini-diff",
     "lazyvim.plugins.extras.editor.outline",
     "lazyvim.plugins.extras.editor.refactoring",
+    "lazyvim.plugins.extras.editor.telescope",
     "lazyvim.plugins.extras.lang.clangd",
     "lazyvim.plugins.extras.lang.go",
     "lazyvim.plugins.extras.lang.json",
