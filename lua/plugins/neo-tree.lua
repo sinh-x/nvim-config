@@ -1,24 +1,24 @@
 return {
-  "nvim-neo-tree/neo-tree.nvim",
+  'nvim-neo-tree/neo-tree.nvim',
   opts = {
     window = {
       mappings = {
-        ["A"] = {
-          "add_directory",
+        ['A'] = {
+          'add_directory',
           config = {
-            show_path = "relative",             -- "none", "relative", "absolute"
+            show_path = 'relative', -- "none", "relative", "absolute"
           },
         },
-        ["a"] = {
-          "add",
+        ['a'] = {
+          'add',
           config = {
-            show_path = "relative",             -- "none", "relative", "absolute"
+            show_path = 'relative', -- "none", "relative", "absolute"
           },
         },
-        ["m"] = {
-          "move",
+        ['m'] = {
+          'move',
           config = {
-            show_path = "relative",             -- "none", "relative", "absolute"
+            show_path = 'relative', -- "none", "relative", "absolute"
           },
         },
       },
