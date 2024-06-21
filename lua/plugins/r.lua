@@ -7,7 +7,10 @@ return {
   {
     'R-nvim/R.nvim',
     lazy = false,
-    opts = function(_, opts) end,
+    opts = function(_, opts)
+      opts.nvimpager = 'split_h'
+      opts.min_editor_width = 1000
+    end,
   },
   -- The second plugin is R-nvim/cmp-r.
   'R-nvim/cmp-r',
@@ -108,6 +111,8 @@ return {
       -- Here I remove and added sources with custom configuration.
       remove_sources 'path'
       remove_sources 'luasnip'
+      remove_sources 'cmp_r'
+
       table.insert(opts.sources, {
         name = 'path',
         priority = 1000,
@@ -123,6 +128,11 @@ return {
         name = 'luasnip',
         priority = 1000,
       })
+      table.insert(opts.sources, {
+        name = 'cmp_r',
+        priority = 1000,
+      })
+
       table.insert(opts.sources, {
         name = 'emoji',
       })
