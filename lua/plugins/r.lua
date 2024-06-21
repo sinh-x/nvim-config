@@ -96,18 +96,18 @@ return {
         end, { 'i', 's' }),
       })
 
-      -- -- Here we are configuring the sources for the plugin.
-      -- 1 - r language server
-      -- 2 - r objects
-      -- 3 - path
-      -- I have to remeve the 3rd source which is cmp-path configureaaaa byth LazyVim
-      -- and switch to my configuration
-      for i = 1, #opts.sources do
-        if opts.sources[i].name == 'path' then
-          table.remove(opts.sources, i)
-          break
+      local function remove_sources(source)
+        for i = 1, #opts.sources do
+          if opts.sources[i].name == source then
+            table.remove(opts.sources, i)
+            break
+          end
         end
       end
+
+      -- Here I remove and added sources with custom configuration.
+      remove_sources 'path'
+      remove_sources 'luasnip'
       table.insert(opts.sources, {
         name = 'path',
         priority = 1000,
@@ -118,6 +118,10 @@ return {
             return vim.fn.getcwd()
           end,
         },
+      })
+      table.insert(opts.sources, {
+        name = 'luasnip',
+        priority = 1000,
       })
       table.insert(opts.sources, {
         name = 'emoji',
