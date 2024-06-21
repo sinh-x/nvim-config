@@ -5,14 +5,20 @@ return {
   -- Note that lazyvim has pre-configured setups for this already just set it load in advance
   -- as ti use R instensively
   {
-    "R-nvim/R.nvim",
+    'R-nvim/R.nvim',
     lazy = false,
+    opts = function(_, opts) end,
   },
   -- The second plugin is R-nvim/cmp-r.
-  "R-nvim/cmp-r",
+  'R-nvim/cmp-r',
   -- The third plugin is hrsh7th/nvim-cmp, which is a completion engine for Neovim.
   {
-    "hrsh7th/nvim-cmp",
+    'hrsh7th/nvim-cmp',
+    dependencies = {
+      'hrsh7th/cmp-emoji',
+      'jalvesaq/cmp-zotcite',
+      'jmbuhr/otter.nvim',
+    },
     -- The opts function is used to configure the plugin. Thist take the example provided on LazyVim website.
     -- And added the sources sections for better auto-completion.
     opts = function(_, opts)
@@ -20,92 +26,151 @@ return {
       local has_words_before = function()
         unpack = unpack or table.unpack
         local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-        return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
+        return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match '%s' == nil
       end
 
-      local cmp = require("cmp")
+      local kind_icons = {
+        Copilot = '',
+        Text = '',
+        Method = '󰆧',
+        Function = '󰊕',
+        Constructor = '󱢌',
+        Field = '󰽐',
+        Variable = 'α',
+        Class = '󰠱',
+        Interface = '',
+        Module = '',
+        Property = '󰜢',
+        Unit = '',
+        Value = '󰎠',
+        Enum = '',
+        Keyword = '󰌋',
+        Snippet = '',
+        Color = '󰏘',
+        File = '󰈙',
+        Reference = '',
+        Folder = '󰉋',
+        EnumMember = '',
+        Constant = '󰏿',
+        Struct = '',
+        Event = '',
+        Operator = '󰆕',
+        TypeParameter = '',
+      }
+
+      local cmp = require 'cmp'
 
       -- Here we are configuring the mappings for the plugin.
-      opts.mapping = vim.tbl_extend("force", opts.mapping, {
-        ["<Tab>"] = cmp.mapping(function(fallback)
+      -- Tap for next / Shift + Tab for previous
+      opts.mapping = vim.tbl_extend('force', opts.mapping, {
+        ['<Tab>'] = cmp.mapping(function(fallback)
           -- If the completion menu is visible, select the next item.
           if cmp.visible() then
             cmp.select_next_item()
-          -- If a snippet is active, jump to the next placeholder.
-          elseif vim.snippet.active({ direction = 1 }) then
+            -- If a snippet is active, jump to the next placeholder.
+          elseif vim.snippet.active { direction = 1 } then
             vim.schedule(function()
               vim.snippet.jump(1)
             end)
-          -- If there are words before the cursor, trigger completion.
+            -- If there are words before the cursor, trigger completion.
           elseif has_words_before() then
             cmp.complete()
-          -- Otherwise, fallback to the default behavior.
+            -- Otherwise, fallback to the default behavior.
           else
             fallback()
           end
-        end, { "i", "s" }),
-        ["<S-Tab>"] = cmp.mapping(function(fallback)
+        end, { 'i', 's' }),
+        ['<S-Tab>'] = cmp.mapping(function(fallback)
           -- If the completion menu is visible, select the previous item.
           if cmp.visible() then
             cmp.select_prev_item()
-          -- If a snippet is active, jump to the previous placeholder.
-          elseif vim.snippet.active({ direction = -1 }) then
+            -- If a snippet is active, jump to the previous placeholder.
+          elseif vim.snippet.active { direction = -1 } then
             vim.schedule(function()
               vim.snippet.jump(-1)
             end)
-          -- Otherwise, fallback to the default behavior.
+            -- Otherwise, fallback to the default behavior.
           else
             fallback()
           end
-        end, { "i", "s" }),
+        end, { 'i', 's' }),
       })
 
-      -- Here we are configuring the sources for the plugin.
-      opts.soucres = vim.tbl_extend("force", opts.sources, {
-        { name = "copilot" },
-        { name = "luasnip" },
-        { name = "cmp_r" },
-        { name = "nvim_lua" },
-        { name = "nvim_lsp" },
-        { name = "buffer" },
-        { name = "path", option = { trailing_slash = false } },
+      -- -- Here we are configuring the sources for the plugin.
+      -- 1 - r language server
+      -- 2 - r objects
+      -- 3 - path
+      -- I have to remeve the 3rd source which is cmp-path configureaaaa byth LazyVim
+      -- and switch to my configuration
+      for i = 1, #opts.sources do
+        if opts.sources[i].name == 'path' then
+          table.remove(opts.sources, i)
+          break
+        end
+      end
+      table.insert(opts.sources, {
+        name = 'path',
+        priority = 1000,
+        option = {
+          trailing_slash = false,
+          label_trailing_slash = true,
+          get_cwd = function()
+            return vim.fn.getcwd()
+          end,
+        },
       })
+      table.insert(opts.sources, {
+        name = 'emoji',
+      })
+      table.insert(opts.sources, {
+        name = 'otter',
+      })
+
+      opts.formatting = {
+        fields = { 'abbr', 'kind', 'menu' },
+        format = function(entry, vim_item)
+          -- Kind icons
+          if kind_icons[vim_item.kind] then
+            vim_item.kind = string.format('%s', kind_icons[vim_item.kind])
+          else
+            vim_item.kind = vim_item.kind
+          end
+          -- Source
+          vim_item.menu = ({
+            copilot = 'a',
+            latex_symbols = '',
+            lbdb = 'lb',
+            otter = 'o',
+            nvim_lsp = '',
+            nvim_lua = 'L',
+            luasnip = '',
+            buffer = '﬘',
+            cmdline = ':',
+            path = '',
+            cmp_zotcite = 'Z',
+            cmp_r = 'R',
+          })[entry.source.name] or entry.source.name
+          return vim_item
+        end,
+      }
     end,
   },
-  -- The fourth plugin is stevearc/conform.nvim, which is a code formatter for Neovim.
   {
-    "stevearc/conform.nvim",
+    'stevearc/conform.nvim',
     opts = function(_, opts)
-      local conform = require("conform")
-
-      -- Here we are configuring the formatters for the plugin using local script prettify for R.
-      -- Content of thes script is as below. Make sure it executable and in  bin PATH.
-      -- #!/usr/bin/env sh
-      -- cp "$1" "$1".bak
-      -- R --quiet --no-echo -e "styler::style_file(\"$1\")" 1>/dev/null 2>&1
-      -- cat "$1"
-
-      opts.formatters = vim.tbl_extend("force", opts.formatters, {
+      opts.formatters = vim.tbl_extend('force', opts.formatters, {
         rprettify = {
-          inherit = "false",
+          inherit = 'false',
           stdin = false,
-          command = "rprettify",
-          args = { "$FILENAME" },
+          command = 'rprettify',
+          args = { '$FILENAME' },
         },
       })
 
       -- Here we are added the local prettify for R into the list of formatterr by file type or the plugin.
-      opts.formatters_by_ft = vim.tbl_extend("force", opts.formatters_by_ft, {
-        r = { "rprettify" },
+      opts.formatters_by_ft = vim.tbl_extend('force', opts.formatters_by_ft, {
+        r = { 'rprettify' },
       })
-    end,
-  },
-  -- The fifth plugin is dense-analysis/ale, which is a linting engine for Neovim.
-  {
-    "dense-analysis/ale",
-    config = function()
-      -- Here we are configuring the linters for the plugin.
-      vim.g.ale_linters = { r = { "lintr" } }
     end,
   },
 }
