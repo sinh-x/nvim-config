@@ -360,10 +360,6 @@ inoremap <c-v>a  <cmd>lua require('luasnip.extras.otf').on_the_fly("a")<cr>
 ]]
 
 require('luasnip').config.setup { store_selection_keys = '<Tab>' }
-local paths = './luasnippets'
-require('luasnip.loaders.from_vscode').load { paths = paths }
-require('luasnip.loaders.from_snipmate').load { paths = paths }
-require('luasnip.loaders.from_lua').load { paths = paths }
 
 -- require("luasnip.loaders").edit_snippet_files {
 --   format = function(file, source_name)
