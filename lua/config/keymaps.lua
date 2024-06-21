@@ -3,8 +3,8 @@
 -- Add any additional keymaps here
 local map = LazyVim.safe_keymap_set
 
-map("n", "<A-Left>", "<Cmd>vertical resize -2<CR>", { desc = "Vertical resize -2" })
-map("n", "<A-Down>", "<Cmd>resize -2<CR>", { desc = "Horizontal resize -2" })
-map("n", "<A-Up>", "<Cmd>resize +2<CR>", { desc = "Horizontal resize +2" })
-map("n", "<A-Right>", "<Cmd>vertical resize +2<CR>", { desc = "Vertical resize +2" })
-map("n", "<leader>cf", "<Cmd>lua vim.lsp.buf.format()<CR>", { desc = "Format" })
+map('n', '<A-Left>', '<Cmd>vertical resize -2<CR>', { desc = 'Vertical resize -2' })
+map('n', '<A-Down>', '<Cmd>resize -2<CR>', { desc = 'Horizontal resize -2' })
+map('n', '<A-Up>', '<Cmd>resize +2<CR>', { desc = 'Horizontal resize +2' })
+map('n', '<A-Right>', '<Cmd>vertical resize +2<CR>', { desc = 'Vertical resize +2' })
+map('n', '<leader>cf', '<Cmd>lua vim.lsp.buf.format()<CR>', { desc = 'Format' })
