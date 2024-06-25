@@ -55,4 +55,12 @@ return {
       opts.timeout = 15000
     end,
   },
+  {
+    'nvim-lualine/lualine.nvim',
+    opts = function(_, opts)
+      opts.options = {
+        globalstatus = false,
+      }
+    end,
+  },
 }
