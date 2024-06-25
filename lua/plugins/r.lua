@@ -10,6 +10,15 @@ return {
     opts = function(_, opts)
       opts.nvimpager = 'split_h'
       opts.min_editor_width = 1000
+      opts.hook = {
+        on_filetype = function()
+          -- This function will be called at the FileType event
+          -- of files supported by R.nvim. This is an
+          -- opportunity to create mappings local to buffers.
+          vim.api.nvim_buf_set_keymap(0, 'n', '<Enter>', '<Plug>RDSendLine', {})
+          vim.api.nvim_buf_set_keymap(0, 'v', '<Enter>', '<Plug>RSendSelection', {})
+        end,
+      }
     end,
   },
   -- The second plugin is R-nvim/cmp-r.
@@ -112,7 +121,7 @@ return {
       remove_sources 'path'
       remove_sources 'luasnip'
       remove_sources 'cmp_r'
-
+      remove_sources 'nvim_lsp'
       table.insert(opts.sources, {
         name = 'path',
         priority = 1000,
@@ -130,7 +139,11 @@ return {
       })
       table.insert(opts.sources, {
         name = 'cmp_r',
-        priority = 1000,
+        priority = 1001,
+      })
+      table.insert(opts.sources, {
+        name = 'nvim_lsp',
+        priority = 1002,
       })
 
       table.insert(opts.sources, {
