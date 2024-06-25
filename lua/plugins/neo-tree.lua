@@ -9,7 +9,11 @@ return {
         end,
       },
     },
+    -- keys = {
+    --   { '<leader>e', '<Cmd>Neotree toggle right<CR>', { desc = 'Toggle NvimTree' } },
+    -- },
     window = {
+      position = 'right',
       mappings = {
         ['A'] = {
           'add_directory',
