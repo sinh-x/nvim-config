@@ -52,7 +52,8 @@ return {
   {
     'rcarriga/nvim-notify',
     opts = function(_, opts)
-      opts.timeout = 15000
+      opts.timeout = 10000
+      opts.top_down = false
     end,
   },
   {
