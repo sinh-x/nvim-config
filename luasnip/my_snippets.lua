@@ -469,3 +469,28 @@ ls.add_snippets('r', {
     i(1, 'bug'),
   }),
 })
+
+ls.add_snippets('nix', {
+  s('fish_plugins', {
+    t '{',
+    t '  name = "',
+    i(1, 'plugin_name'),
+    t '";',
+    -- Linebreak
+    t '  src = pkgs.fetchFromGitHub {',
+    t '    owner = "',
+    i(2, 'owner'),
+    t '";',
+    t '    repo = "',
+    i(3, 'repo'),
+    t '";',
+    t '    rev = "',
+    i(4, 'rev'),
+    t '";',
+    t '    sha56 = "',
+    i(5, 'sha56'),
+    t '";',
+    t '  }',
+    t '}',
+  }),
+})
